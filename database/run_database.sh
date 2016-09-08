@@ -1,0 +1,1 @@
+docker run --name mysqldb -v data:/var/lib/mysql -e MYSQL_USER=databox -e MYSQL_PASSWORD=databox -e MYSQL_DATABASE=databox_directory -e MYSQL_ROOT_PASSWORD=databox -it -p 3307:3306 mysql
