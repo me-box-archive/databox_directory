@@ -9,7 +9,7 @@ var sensor = require('../models/sensor.js');
 var vendor = require('../models/vendor.js');
 
 
-/* GET users listing. */
+/* GET methods for getting all data for each entity type listing. */
 router.get('/actuator_type', function(req, res, next) {
   
   actuator_type.get_all(function(err, data) {
@@ -20,6 +20,19 @@ router.get('/actuator_type', function(req, res, next) {
   	else {
   		res.send(data);
   	}
+  });
+});
+
+router.get('/sensor', function(req, res, next) {
+  
+  sensor.get_all(function(err, data) {
+    if(err) {
+      console.log("there has been an error");
+      res.send(err);
+    }
+    else {
+      res.send(data);
+    }
   });
 });
 
@@ -75,6 +88,32 @@ router.get('/sensor_type', function(req, res, next) {
 
 router.get('/vendor', function(req, res, next) {
   vendor.get_all(function(err, data) {
+    if(err) {
+      console.log("there has been an error");
+      res.send(err);
+    }
+    else {
+      res.send(data);
+    }
+  });
+});
+
+router.get('/vendor/:id/sensor', function(req, res, next) {
+  var vendor_id = req.params.id;
+  sensor.get_by_vendor_id(vendor_id,function(err, data) {
+    if(err) {
+      console.log("there has been an error");
+      res.send(err);
+    }
+    else {
+      res.send(data);
+    }
+  });
+});
+
+router.get('/vendor/:id/actuator', function(req, res, next) {
+  var vendor_id = req.params.id;
+  actuator.get_by_vendor_id(vendor_id,function(err, data) {
     if(err) {
       console.log("there has been an error");
       res.send(err);

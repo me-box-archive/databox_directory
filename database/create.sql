@@ -1,5 +1,13 @@
 # ************************************************************
+# Sequel Pro SQL dump
+# Version 4541
+#
+# http://www.sequelpro.com/
+# https://github.com/sequelpro/sequelpro
+#
+# Host: 127.0.0.1 (MySQL 5.7.15)
 # Database: databox_directory
+# Generation Time: 2016-09-08 10:21:32 +0000
 # ************************************************************
 
 
@@ -62,7 +70,10 @@ CREATE TABLE `controller` (
   `description` text,
   `hostname` text,
   `api_endpoint` text,
-  PRIMARY KEY (`id`)
+  `vendor_id` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `vendor_id` (`vendor_id`),
+  CONSTRAINT `controller_ibfk_1` FOREIGN KEY (`vendor_id`) REFERENCES `vendor` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -92,7 +103,10 @@ CREATE TABLE `driver` (
   `description` text,
   `hostname` text,
   `comments` text,
-  PRIMARY KEY (`id`)
+  `vendor_id` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `vendor_id` (`vendor_id`),
+  CONSTRAINT `driver_ibfk_1` FOREIGN KEY (`vendor_id`) REFERENCES `vendor` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
