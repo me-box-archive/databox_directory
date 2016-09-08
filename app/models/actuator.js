@@ -16,7 +16,7 @@ exports.create = function(confined_dive_id, description, ssi_diver_number) {
 }
 
 exports.get_all = function(done) {
-  db.get().query("SELECT * FROM actuatior", function (err, rows) {
+  db.get().query("SELECT * FROM actuator", function (err, rows) {
     if (err) 
       return done(err);
     else {

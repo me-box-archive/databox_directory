@@ -9,3 +9,10 @@ exports.get_all = function(done) {
     }
   })
 }
+
+exports.get_by_vendor_id = function(vendor_id, done) {
+  db.get().query('SELECT * FROM controller WHERE vendor_id = ?', vendor_id, function (err, rows) {
+    if (err) return done(err)
+    done(null, rows)
+  })
+}

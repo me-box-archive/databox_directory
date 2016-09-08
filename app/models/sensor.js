@@ -32,3 +32,11 @@ exports.get_by_vendor_id = function(vendor_id, done) {
     done(null, rows)
   })
 }
+
+exports.get_by_sensor_type_id = function(vendor_id, done) {
+  console.log("vendor id is: " + vendor_id);
+  db.get().query('SELECT * FROM sensor WHERE sensor_type_id = ?', vendor_id, function (err, rows) {
+    if (err) return done(err)
+    done(null, rows)
+  })
+}

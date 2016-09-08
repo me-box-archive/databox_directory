@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.7.15)
 # Database: databox_directory
-# Generation Time: 2016-09-08 10:21:32 +0000
+# Generation Time: 2016-09-08 13:05:57 +0000
 # ************************************************************
 
 
@@ -29,11 +29,11 @@ CREATE TABLE `actuator` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `controller_id` int(11) unsigned DEFAULT NULL,
   `driver_id` int(11) unsigned DEFAULT NULL,
-  `vendor_id` int(11) unsigned DEFAULT NULL,
-  `vendor_code` int(11) DEFAULT NULL,
-  `description` int(11) DEFAULT NULL,
-  `location` int(11) DEFAULT NULL,
   `actuator_type_id` int(10) unsigned DEFAULT NULL,
+  `vendor_id` int(11) unsigned DEFAULT NULL,
+  `vendor_code` char(11) DEFAULT NULL,
+  `description` text,
+  `location` text,
   PRIMARY KEY (`id`),
   UNIQUE KEY `vendor_id` (`vendor_id`,`vendor_code`),
   KEY `controller_id` (`controller_id`),
@@ -122,8 +122,8 @@ CREATE TABLE `sensor` (
   `sensor_type_id` int(11) unsigned DEFAULT NULL,
   `datastore_id` int(11) unsigned DEFAULT NULL,
   `vendor_id` int(11) unsigned DEFAULT NULL,
-  `vendor_code` int(11) DEFAULT NULL,
-  `unit` char(11) DEFAULT NULL,
+  `vendor_code` char(11) DEFAULT NULL,
+  `unit` char(20) DEFAULT NULL,
   `short_unit` char(5) DEFAULT '',
   `description` text,
   `location` text,

@@ -1,0 +1,9 @@
+FROM mysql:latest
+
+ENV MYSQL_ROOT_PASSWORD databox
+ENV MYSQL_DATABASE databox_directory
+ENV MYSQL_USER databox
+ENV MYSQL_PASSWORD databox
+
+ADD create.sql /docker-entrypoint-initdb.d/
+ADD seed_content.sql /docker-entrypoint-initdb.d/
