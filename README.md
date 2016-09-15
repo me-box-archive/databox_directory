@@ -24,7 +24,7 @@ In databox:
 
 * sensors get data into a datastore via a driver
 * drivers are provided by vendors 
-* datastores are provided by vendors
+* datastores are provided by the databox organisation
 * a driver must have a vendor and datastore 
 * drivers and datastores have a 1-1 mapping
 * a driver / vendor / datastore can have many sensors
