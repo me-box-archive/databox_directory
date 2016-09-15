@@ -1,11 +1,9 @@
 var express = require('express');
 var path = require('path');
-var favicon = require('serve-favicon');
 var logger = require('morgan');
-var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var db = require('./database/db.js')
+var db = require('./database/db.js');
 
 var api = require('./routes/api');
 
@@ -15,8 +13,8 @@ var debug = require('debug')('databox_directory:server');
 var http = require('http');
 
 // get port from env or 3000
-var port = 3000;
-app.set('port', port);
+const PORT = 3000;
+app.set('port', PORT);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -24,13 +22,9 @@ app.set('view engine', 'jade');
 
 
 // app setup
-
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api', api);
 
@@ -103,7 +97,9 @@ function onError(error) {
 
 server.on('error', onError);
 server.on('listening', onListening);
-server.listen(port);
+server.listen(, function(){
+    console.log("Server listening on: http://localhost:%s", PORT);
+});
 
 db.connect(db.MODE_PRODUCTION, function(err) {
   if (err) {
@@ -114,7 +110,5 @@ db.connect(db.MODE_PRODUCTION, function(err) {
     
   }
 })
-
-
 
 module.exports = app;
