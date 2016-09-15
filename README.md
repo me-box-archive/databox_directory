@@ -13,7 +13,7 @@ This part of the databox platform provides the directory service for the databox
 It is resposible for storing the mapping of:
 
 * Vendors of sensors
-* Datastores for sensing drivers
+* Datastores for sensor drivers
 * Drivers for sensors
 * Controllers for actuating drivers
 * Types of sensors
@@ -27,7 +27,7 @@ In databox:
 * datastores are provided by vendors
 * a driver must have a vendor and datastore 
 * drivers and datastores have a 1-1 mapping
-* a driver / vendor / datadstore can have many sensors
+* a driver / vendor / datastore can have many sensors
 * a sensor can only have 1 datastore / driver / vendor
 * a sensor must have a vendor, driver, datastore, and type
 * a vendor can have multiple sensors and the the vendor_code is unique to the vendor (but not to the databox)
@@ -36,7 +36,6 @@ In databox:
 For a vendor to be able to get data from thier sensors into a databox datastore they must minimally:
 
 * Be registered as a vendor
-* Have registered a datastore 
 * Have registerd a driver for the datastore
 * Make use of an existing, or register a new unique sensor type
 
