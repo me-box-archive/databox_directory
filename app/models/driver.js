@@ -32,7 +32,8 @@ exports.register = function(hostname, description, vendor_id, done) {
           db.get().query("INSERT INTO driver SET ?", 
           {
               "description" : description, 
-              "hostname": hostname
+              "hostname": hostname,
+              "vendor_id": vendor_id
           }, function (err, result) {
               if (err)
                 return done(err);

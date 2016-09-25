@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.7.15)
 # Database: databox_directory
-# Generation Time: 2016-09-08 13:06:41 +0000
+# Generation Time: 2016-09-25 18:01:46 +0000
 # ************************************************************
 
 
@@ -26,7 +26,7 @@
 LOCK TABLES `actuator` WRITE;
 /*!40000 ALTER TABLE `actuator` DISABLE KEYS */;
 
-INSERT INTO `actuator` (`id`, `controller_id`, `driver_id`, `actuator_type_id`, `vendor_id`, `vendor_code`, `description`, `location`)
+INSERT INTO `actuator` (`id`, `controller_id`, `driver_id`, `actuator_type_id`, `vendor_id`, `vendor_actuator_id`, `description`, `location`)
 VALUES
 	(1,1,1,1,2,'BULB1','hue multi colour bulb','Living Room'),
 	(2,1,1,1,2,'BULB2','hue multi colour bulb','Living Room'),
@@ -34,6 +34,11 @@ VALUES
 
 /*!40000 ALTER TABLE `actuator` ENABLE KEYS */;
 UNLOCK TABLES;
+
+
+# Dump of table actuator_method
+# ------------------------------------------------------------
+
 
 
 # Dump of table actuator_type
@@ -56,9 +61,9 @@ UNLOCK TABLES;
 LOCK TABLES `controller` WRITE;
 /*!40000 ALTER TABLE `controller` DISABLE KEYS */;
 
-INSERT INTO `controller` (`id`, `description`, `hostname`, `api_endpoint`, `vendor_id`)
+INSERT INTO `controller` (`id`, `hostname`, `api_url`)
 VALUES
-	(1,'Hue bulbs actuation controller','controller_huebulbs:8080','/actuate/',2);
+	(1,'controller_huebulbs:8080','/actuate/');
 
 /*!40000 ALTER TABLE `controller` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -70,10 +75,12 @@ UNLOCK TABLES;
 LOCK TABLES `datastore` WRITE;
 /*!40000 ALTER TABLE `datastore` DISABLE KEYS */;
 
-INSERT INTO `datastore` (`id`, `description`, `hostname`, `api_url`)
+INSERT INTO `datastore` (`id`, `hostname`, `api_url`)
 VALUES
-	(1,'Wireless things time series data store','datastore_wirelessthings:8080','/api/data'),
-	(2,'Hue bulbs state datastore','datastore_huebulbs:8080','/api/data');
+	(1,'datastore_wirelessthings:8080','/api/data'),
+	(2,'datastore_huebulbs:8080','/api/data'),
+	(3,'datastore_timeseries:8080','api'),
+	(4,'datastore_timeserieslol:8080','/api/foo');
 
 /*!40000 ALTER TABLE `datastore` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -85,10 +92,11 @@ UNLOCK TABLES;
 LOCK TABLES `driver` WRITE;
 /*!40000 ALTER TABLE `driver` DISABLE KEYS */;
 
-INSERT INTO `driver` (`id`, `description`, `hostname`, `comments`, `vendor_id`)
+INSERT INTO `driver` (`id`, `description`, `hostname`, `vendor_id`)
 VALUES
-	(1,'Wireless things datastore driver','driver_wirelessthings','some throw away comment',1),
-	(2,'Hue bulbs datastore and actuation driver','driver_huebulbs','must be insitialised when hub is present',2);
+	(1,'Wireless things datastore driver','driver_wirelessthings',1),
+	(2,'Hue bulbs datastore and actuation driver','driver_huebulbs',2),
+	(3,'amazing phillips hue actuating and sensing driver','driver_phillipshue',10);
 
 /*!40000 ALTER TABLE `driver` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -100,11 +108,14 @@ UNLOCK TABLES;
 LOCK TABLES `sensor` WRITE;
 /*!40000 ALTER TABLE `sensor` DISABLE KEYS */;
 
-INSERT INTO `sensor` (`id`, `driver_id`, `sensor_type_id`, `datastore_id`, `vendor_id`, `vendor_code`, `unit`, `short_unit`, `description`, `location`)
+INSERT INTO `sensor` (`id`, `driver_id`, `sensor_type_id`, `datastore_id`, `vendor_id`, `vendor_sensor_id`, `unit`, `short_unit`, `description`, `location`)
 VALUES
 	(1,1,1,1,1,'AATEMP','Degrees Cel','ºC','Temperature sensor','Kitchen'),
 	(4,1,1,1,1,'ABTEMP','Degrees Cel','ºC','Temperature sensor','Bathroom'),
-	(5,1,1,1,1,'ACTEMP','Degrees Cel','ºC','Temperature sensor','Living Room');
+	(5,1,1,1,1,'ACTEMP','Degrees Cel','ºC','Temperature sensor','Living Room'),
+	(6,2,5,4,10,'1-state','on','on','hue bulb state','bedroom'),
+	(7,2,5,4,10,'2-state','on','on','hue bulb state','bedroom'),
+	(10,2,5,2,2,'3-state','on','on','hue bulb state','bedroom');
 
 /*!40000 ALTER TABLE `sensor` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -120,7 +131,9 @@ INSERT INTO `sensor_type` (`id`, `description`)
 VALUES
 	(1,'Temperature'),
 	(2,'Humidity'),
-	(3,'Electrical Power');
+	(3,'Electrical Power'),
+	(4,'Co2'),
+	(5,'bulb');
 
 /*!40000 ALTER TABLE `sensor_type` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -135,7 +148,11 @@ LOCK TABLES `vendor` WRITE;
 INSERT INTO `vendor` (`id`, `description`)
 VALUES
 	(1,'Wireless Things'),
-	(2,'Phillips Hue');
+	(2,'Phillips Hue'),
+	(6,'foo vendor'),
+	(7,'another vendor'),
+	(9,'this is a vendor'),
+	(10,'Phillips_Hue');
 
 /*!40000 ALTER TABLE `vendor` ENABLE KEYS */;
 UNLOCK TABLES;

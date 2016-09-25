@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.7.15)
 # Database: databox_directory
-# Generation Time: 2016-09-08 13:05:57 +0000
+# Generation Time: 2016-09-25 18:01:04 +0000
 # ************************************************************
 
 
@@ -31,11 +31,11 @@ CREATE TABLE `actuator` (
   `driver_id` int(11) unsigned DEFAULT NULL,
   `actuator_type_id` int(10) unsigned DEFAULT NULL,
   `vendor_id` int(11) unsigned DEFAULT NULL,
-  `vendor_code` char(11) DEFAULT NULL,
+  `vendor_actuator_id` char(11) DEFAULT NULL,
   `description` text,
   `location` text,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `vendor_id` (`vendor_id`,`vendor_code`),
+  UNIQUE KEY `vendor_id` (`vendor_id`,`vendor_actuator_id`),
   KEY `controller_id` (`controller_id`),
   KEY `driver_id` (`driver_id`),
   KEY `actuator_type_id` (`actuator_type_id`),
@@ -43,6 +43,22 @@ CREATE TABLE `actuator` (
   CONSTRAINT `actuator_ibfk_2` FOREIGN KEY (`driver_id`) REFERENCES `driver` (`id`),
   CONSTRAINT `actuator_ibfk_3` FOREIGN KEY (`vendor_id`) REFERENCES `vendor` (`id`),
   CONSTRAINT `actuator_ibfk_4` FOREIGN KEY (`actuator_type_id`) REFERENCES `actuator_type` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+
+# Dump of table actuator_method
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `actuator_method`;
+
+CREATE TABLE `actuator_method` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `actuator_id` int(11) unsigned NOT NULL,
+  `description` char(20) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`),
+  KEY `actuator_id` (`actuator_id`),
+  CONSTRAINT `actuator_method_ibfk_1` FOREIGN KEY (`actuator_id`) REFERENCES `actuator` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -67,13 +83,9 @@ DROP TABLE IF EXISTS `controller`;
 
 CREATE TABLE `controller` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `description` text,
   `hostname` text,
-  `api_endpoint` text,
-  `vendor_id` int(10) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `vendor_id` (`vendor_id`),
-  CONSTRAINT `controller_ibfk_1` FOREIGN KEY (`vendor_id`) REFERENCES `vendor` (`id`)
+  `api_url` text,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -85,10 +97,10 @@ DROP TABLE IF EXISTS `datastore`;
 
 CREATE TABLE `datastore` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `description` text,
-  `hostname` text,
-  `api_url` text,
-  PRIMARY KEY (`id`)
+  `hostname` char(30) NOT NULL DEFAULT '',
+  `api_url` text NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `hostname` (`hostname`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -100,10 +112,9 @@ DROP TABLE IF EXISTS `driver`;
 
 CREATE TABLE `driver` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `description` text,
-  `hostname` text,
-  `comments` text,
-  `vendor_id` int(10) unsigned DEFAULT NULL,
+  `description` text NOT NULL,
+  `hostname` char(30) NOT NULL DEFAULT '',
+  `vendor_id` int(11) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `vendor_id` (`vendor_id`),
   CONSTRAINT `driver_ibfk_1` FOREIGN KEY (`vendor_id`) REFERENCES `vendor` (`id`)
@@ -122,13 +133,13 @@ CREATE TABLE `sensor` (
   `sensor_type_id` int(11) unsigned DEFAULT NULL,
   `datastore_id` int(11) unsigned DEFAULT NULL,
   `vendor_id` int(11) unsigned DEFAULT NULL,
-  `vendor_code` char(11) DEFAULT NULL,
+  `vendor_sensor_id` char(11) DEFAULT NULL,
   `unit` char(20) DEFAULT NULL,
   `short_unit` char(5) DEFAULT '',
   `description` text,
   `location` text,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `vendor_id` (`vendor_id`,`vendor_code`),
+  UNIQUE KEY `vendor_id` (`vendor_id`,`vendor_sensor_id`),
   KEY `driver_id` (`driver_id`),
   KEY `sensor_type_id` (`sensor_type_id`),
   KEY `datastore_id` (`datastore_id`),
