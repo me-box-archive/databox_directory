@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var actuator_type = require('../models/actuator_type.js');
+var actuator_method = require('../models/actuator_method.js')
 var actuator = require('../models/actuator.js');
 var controller = require('../models/controller.js');
 var datastore = require('../models/datastore.js');
@@ -282,6 +283,57 @@ router.post('/sensor/register', function(req, res, next) {
     }
   });
 });
+
+router.post('/actuator/register', function(req, res, next) {
+  var driver_id = req.body.driver_id;
+  var actuator_type_id = req.body.actuator_type_id;
+  var controller_id = req.body.controllerdatastore_id;
+  var vendor_actuator_id = req.body.vendor_actuator_id;
+  var description = req.body.description;
+  var location = req.body.location;
+  var vendor_id = req.body.vendor_id;
+
+  sensor.register(driver_id, actuator_type_id, controller_id, vendor_id, vendor_actuator_id, description, location, function(err, data) {
+    if(err) {
+      console.log("there has been an error");
+      res.send(err);
+    }
+    else {
+      res.send(data);
+    }
+  });
+});
+
+router.post('/actuator_method/register', function(req, res, next) {
+  var actuator_id = req.body.actuator_id;
+  var description = req.body.description;
+
+  actuator_method.register(actuator_id, description, function(err, data) {
+    if(err) {
+      console.log("there has been an error");
+      res.send(err);
+    }
+    else {
+      res.send(data);
+    }
+  });
+});
+
+router.post('/controller/register', function(req, res, next) {
+  var hostname = req.body.hostname;
+  var api_url = req.body.api_url;
+
+  controller.register(hostname, api_url, function(err, data) {
+    if(err) {
+      console.log("there has been an error");
+      res.send(err);
+    }
+    else {
+      res.send(data);
+    }
+  });
+});
+
 
 
 

@@ -29,7 +29,7 @@ exports.register = function(actuator_id, description, done) {
         if(rows.length > 0)
             return done(null, rows[0]);
         else{
-          db.get().query("INSERT INTO actuator SET ?", 
+          db.get().query("INSERT INTO actuator_method SET ?", 
           {
               "description" : description, 
               "actuator_id": actuator_id
