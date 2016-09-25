@@ -230,4 +230,60 @@ router.post('/actuator_type/register', function(req, res, next) {
   });
 });
 
+router.post('/datastore/register', function(req, res, next) {
+  var datastore_hostname = req.body.hostname;
+  var datastore_api_url = req.body.api_url;
+
+  datastore.register(datastore_hostname, datastore_api_url, function(err, data) {
+    if(err) {
+      console.log("there has been an error");
+      res.send(err);
+    }
+    else {
+      res.send(data);
+    }
+  });
+});
+
+router.post('/driver/register', function(req, res, next) {
+  var driver_hostname = req.body.hostname;
+  var driver_description = req.body.description;
+  var vendor_id = req.body.vendor_id;
+
+  driver.register(driver_hostname, driver_description, vendor_id, function(err, data) {
+    if(err) {
+      console.log("there has been an error");
+      res.send(err);
+    }
+    else {
+      res.send(data);
+    }
+  });
+});
+
+router.post('/sensor/register', function(req, res, next) {
+  var driver_id = req.body.driver_id;
+  var sensor_type_id = req.body.sensor_type_id;
+  var datastore_id = req.body.datastore_id;
+  var vendor_sensor_id = req.body.vendor_sensor_id;
+  var unit = req.body.unit;
+  var short_unit = req.body.short_unit;
+  var description = req.body.description;
+  var location = req.body.location;
+  var vendor_id = req.body.vendor_id;
+
+  sensor.register(driver_id, sensor_type_id, datastore_id, vendor_id, vendor_sensor_id, unit, short_unit, description, location, function(err, data) {
+    if(err) {
+      console.log("there has been an error");
+      res.send(err);
+    }
+    else {
+      res.send(data);
+    }
+  });
+});
+
+
+
+
 module.exports = router;

@@ -1,19 +1,106 @@
 var db = require('../database/db.js')
 
-exports.create = function(confined_dive_id, description, ssi_diver_number) {
-  var values = [userId, text, new Date().toISOString()]
-  // check all values are compeleted
-  // check existnce of vendor ids
-  // flag error if vendor id doesnt exist
-  // compile error message
-  // if no error then attempt insert
-  // else return error message
-  db.get().query('INSERT INTO sensor (NULL, text, date) VALUES(?, ?, ?)', values, function(err, result) {
+exports.register = function(driver_id, sensor_type_id, datastore_id, vendor_id, vendor_sensor_id, unit, short_unit, description, location, done) {
+  
+  var success = true; 
+  var errors = {};
+
+  db.get().query("SELECT * FROM vendor where id = ?", vendor_id, function (err, rows) {
     if (err) 
       return done(err);
-    done(null, result.insertId)
-  })
-}
+    if(rows.length == 0) {
+        success = false;
+        errors.vendor_error = "vendor id does not exist";
+    }    
+
+    db.get().query("SELECT * FROM sensor_type where id = ?", sensor_type_id, function (err, rows) {
+      if (err) 
+        return done(err);
+      if(rows.length == 0) {
+          success = false;
+          errors.sensor_type_error = "sensor type id does not exist";
+      }
+      db.get().query("SELECT * FROM datastore where id = ?", datastore_id, function (err, rows) {
+        
+        if (err) 
+          return done(err);
+        console.log(rows);
+        if(rows.length == 0) {
+            success = false;
+            console.log(success);
+            errors.datastore_error = "datastore id does not exist";
+        }  
+        db.get().query("SELECT * FROM driver where id = ?", driver_id, function (err, rows) {
+          if (err) 
+            return done(err);
+          if(rows.length == 0) {
+              success = false;
+              errors.driver_error = "driver id does not exist";
+          }
+          if(success) {
+            console.log("progress");
+            db.get().query("SELECT * FROM sensor where vendor_sensor_id = ? AND vendor_id = ?", [vendor_sensor_id, vendor_id], function (err, rows) {
+              if (err) 
+                return done(err);
+              if(rows.length > 0)
+                  return done(null, rows[0]);
+              else{
+
+                db.get().query("INSERT INTO sensor SET ?", 
+                {
+                    "description" : description, 
+                    "driver_id": driver_id, 
+                    "sensor_type_id" : sensor_type_id, 
+                    "datastore_id" : datastore_id, 
+                    "vendor_id" : vendor_id, 
+                    "vendor_sensor_id" : vendor_sensor_id, 
+                    "unit" : unit, 
+                    "short_unit" : short_unit, 
+                    "location" : location
+                }, function (err, result) {
+                    if (err)
+                      return done(err);
+                    else
+                      return done(null, 
+                    {
+                        "id":result.insertId, 
+                        "description" : description, 
+                        "driver_id": driver_id, 
+                        "sensor_type_id" : sensor_type_id, 
+                        "datastore_id" : datastore_id, 
+                        "vendor_id" : vendor_id, 
+                        "vendor_sensor_id" : vendor_sensor_id, 
+                        "unit" : unit, 
+                        "short_unit" : short_unit, 
+                        "location" : location
+                    });
+                });    
+              }
+            });
+          }
+          else {
+            return done(null,errors);
+          }
+        });
+      });
+    });
+  });
+};
+
+exports.get_global_id = function(vendor_sensor_id, vendor_id, done) {
+  
+  var success = true; 
+  var errors = {};
+
+  db.get().query("SELECT * FROM sensor where vendor_sensor_id = ? AND vendor_id = ?", vendor_sensor_id, vendor_id, function (err, rows) {
+    if (err) 
+      return done(err);
+    if(rows.length > 0)
+        return done(null, rows[0]);
+    else
+        return done({"error": "no entry for this sensor, please register sensor"});
+    });    
+};
 
 exports.get_all = function(done) {
   db.get().query("SELECT * FROM sensor", function (err, rows) {
