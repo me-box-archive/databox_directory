@@ -12,8 +12,7 @@ var app = express();
 var debug = require('debug')('databox_directory:server');
 var http = require('http');
 
-// get port from env or 3000
-const PORT = 3000;
+const PORT = 3001;
 app.set('port', PORT);
 
 // view engine setup
@@ -76,9 +75,9 @@ function onError(error) {
     throw error;
   }
 
-  var bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+  var bind = typeof PORT === 'string'
+    ? 'Pipe ' + PORT
+    : 'Port ' + PORT;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {

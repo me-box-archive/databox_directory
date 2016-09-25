@@ -9,10 +9,7 @@ var sensor = require('../models/sensor.js');
 var vendor = require('../models/vendor.js');
 var driver = require('../models/driver.js');
 
-
-/* GET methods for getting all data for each entity type listing. */
 router.get('/actuator_type', function(req, res, next) {
-  
   actuator_type.get_all(function(err, data) {
   	if(err) {
   		console.log("there has been an error");
@@ -25,7 +22,6 @@ router.get('/actuator_type', function(req, res, next) {
 });
 
 router.get('/sensor', function(req, res, next) {
-  
   sensor.get_all(function(err, data) {
     if(err) {
       console.log("there has been an error");
@@ -195,8 +191,43 @@ router.get('/vendor/:id/driver', function(req, res, next) {
   });
 });
 
+router.post('/vendor/register', function(req, res, next) {
+  var vendor_description = req.body.description;
+  vendor.register(vendor_description,function(err, data) {
+    if(err) {
+      console.log("there has been an error");
+      res.send(err);
+    }
+    else {
+      res.send(data);
+    }
+  });
+});
 
+router.post('/sensor_type/register', function(req, res, next) {
+  var sensor_type_description = req.body.description;
+  sensor_type.register(sensor_type_description,function(err, data) {
+    if(err) {
+      console.log("there has been an error");
+      res.send(err);
+    }
+    else {
+      res.send(data);
+    }
+  });
+});
 
-
+router.post('/actuator_type/register', function(req, res, next) {
+  var actuator_type_description = req.body.description;
+  actuator_type.register(actuator_type_description,function(err, data) {
+    if(err) {
+      console.log("there has been an error");
+      res.send(err);
+    }
+    else {
+      res.send(data);
+    }
+  });
+});
 
 module.exports = router;
