@@ -3,11 +3,11 @@ services:
     databox_directory_mysql:
         build: database
         ports:
-            - "3308:3306"
+            - "3306"
 
     databox_directory:
         build: app
         links:
             - databox_directory_mysql
         ports: 
-            - "3001:3000"
+            - "3000"

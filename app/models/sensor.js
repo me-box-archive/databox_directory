@@ -5,6 +5,19 @@ exports.register = function(driver_id, sensor_type_id, datastore_id, vendor_id, 
   var success = true; 
   var errors = {};
 
+  var insert_data = {
+                      "description" : description, 
+                      "driver_id": driver_id, 
+                      "sensor_type_id" : sensor_type_id, 
+                      "datastore_id" : datastore_id, 
+                      "vendor_id" : vendor_id, 
+                      "vendor_sensor_id" : vendor_sensor_id, 
+                      "unit" : unit, 
+                      "short_unit" : short_unit, 
+                      "location" : location
+                    };
+  console.log(insert_data);
+
   db.get().query("SELECT * FROM vendor where id = ?", vendor_id, function (err, rows) {
     if (err) 
       return done(err);

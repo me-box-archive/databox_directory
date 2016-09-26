@@ -71,6 +71,20 @@ router.get('/datastore', function(req, res, next) {
   });
 });
 
+router.post('/datastore/get_id', function(req, res, next) {
+  var hostname = req.body.hostname;
+  datastore.get_id(hostname, function(err, data) {
+    if(err) {
+      console.log("there has been an error");
+      res.send(err);
+    }
+    else {
+      res.send(data);
+    }
+  });
+});
+
+
 router.get('/driver', function(req, res, next) {
   driver.get_all(function(err, data) {
     if(err) {
@@ -219,8 +233,8 @@ router.post('/sensor_type/register', function(req, res, next) {
 });
 
 router.post('/actuator_type/register', function(req, res, next) {
-  var actuator_type_description = req.body.description;
-  actuator_type.register(actuator_type_description,function(err, data) {
+  var description = req.body.description;
+  actuator_type.register(description,function(err, data) {
     if(err) {
       console.log("there has been an error");
       res.send(err);
@@ -273,6 +287,8 @@ router.post('/sensor/register', function(req, res, next) {
   var location = req.body.location;
   var vendor_id = req.body.vendor_id;
 
+
+  console.log(req.body);
   sensor.register(driver_id, sensor_type_id, datastore_id, vendor_id, vendor_sensor_id, unit, short_unit, description, location, function(err, data) {
     if(err) {
       console.log("there has been an error");
@@ -334,8 +350,19 @@ router.post('/controller/register', function(req, res, next) {
   });
 });
 
+router.post('/datastore/register', function(req, res, next) {
+  var hostname = req.body.hostname;
+  var api_url = req.body.api_url;
 
-
-
+  datastore.register(hostname, api_url, function(err, data) {
+    if(err) {
+      console.log("there has been an error");
+      res.send(err);
+    }
+    else {
+      res.send(data);
+    }
+  });
+});
 
 module.exports = router;

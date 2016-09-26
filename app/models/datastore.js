@@ -10,6 +10,16 @@ exports.get_all = function(done) {
   })
 }
 
+exports.get_id = function(hostname, done) {
+  db.get().query("SELECT * FROM datastore where hostname = ?", hostname, function (err, rows) {
+    if (err) 
+      return done(err);
+    else {
+      return done(null, rows[0]);
+    }
+  })
+}
+
 exports.register = function(hostname, api_url, done) {
 
     db.get().query("SELECT * FROM datastore where hostname = ?", hostname, function (err, rows) {

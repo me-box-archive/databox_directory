@@ -12,7 +12,7 @@ var app = express();
 var debug = require('debug')('databox_directory:server');
 var http = require('http');
 
-const PORT = 3001;
+const PORT = 3000;
 app.set('port', PORT);
 
 // view engine setup
