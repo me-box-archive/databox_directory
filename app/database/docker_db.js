@@ -14,7 +14,7 @@ var state = {
 
 exports.connect = function(mode, done) {
   state.pool = mysql.createPool({
-    host: 'databox_directory_mysql',
+    host: 'localhost',
     port: '3306',
     user: 'databox',
     password: 'databox',
