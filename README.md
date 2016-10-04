@@ -250,11 +250,6 @@ The API documentation is as follows:
 	Sample response: same as /controller but only for specified vendor
 
 	METHOD: GET
-	URL: /api/vendor/<id>/datastore
-	Params: inline id
-	Sample response: same as /datastore but only for specified vendor
-
-	METHOD: GET
 	URL: /api/vendor/<id>/driver
 	Params: inline id
 	Sample response: same as /driver but only for specified vendor
