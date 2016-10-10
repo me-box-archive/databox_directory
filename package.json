@@ -1,0 +1,26 @@
+{
+  "name": "databox-directory",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./app/app.js",
+    "build": "docker build -f Dockerfile-x86 -t databox/databox-directory .",
+    "deploy": "docker tag databox/databox-directory registry.upintheclouds.org/databox-directory && docker push registry.upintheclouds.org/databox-directory",
+    "clean": "node ./node_modules/modclean/bin/modclean.js -p ./node_modules/ -r",
+    "getshell": "docker exec -i -t databox-directory /bin/bash",
+    "kill": "docker kill databox-directory",
+    "attach": "docker attach databox-directory",
+    "shell": "docker run -i -t databox/databox-directory /bin/bash",
+    "local": "docker run -i -t databox/databox-directory"
+  },
+  "dependencies": {
+    "body-parser": "~1.13.2",
+    "cookie-parser": "~1.3.5",
+    "debug": "~2.2.0",
+    "express": "~4.13.1",
+    "jade": "~1.11.0",
+    "morgan": "~1.6.1",
+    "mysql": "^2.11.1",
+    "serve-favicon": "~2.3.0"
+  }
+}

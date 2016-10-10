@@ -11,6 +11,7 @@ exports.get_all = function(done) {
 };
 
 exports.does_vendor_exist = function(id, description, done) {
+	console.log("SELECT * FROM vendor where description = " + vendor_description);
 	db.get().query("SELECT * FROM vendor where description = ?", vendor_description, function (err, rows) {
 		if (err) 
 	  		return done(err);
@@ -26,6 +27,7 @@ exports.does_vendor_exist = function(id, description, done) {
 };
 
 exports.register = function(vendor_description, done) {
+	console.log("SELECT * FROM vendor where description = " + vendor_description);
   	db.get().query("SELECT * FROM vendor where description = ?", vendor_description, function (err, rows) {
 		if (err) 
 	  		return done(err);

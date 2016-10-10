@@ -207,10 +207,13 @@ router.get('/vendor/:id/driver', function(req, res, next) {
 });
 
 router.post('/vendor/register', function(req, res, next) {
+  console.log(req);
+  console.log(res);
   var vendor_description = req.body.description;
   vendor.register(vendor_description,function(err, data) {
     if(err) {
-      console.log("there has been an error");
+      console.log("[/vendor/register] there has been an error");
+      console.log(err);
       res.send(err);
     }
     else {
@@ -291,7 +294,7 @@ router.post('/sensor/register', function(req, res, next) {
   console.log(req.body);
   sensor.register(driver_id, sensor_type_id, datastore_id, vendor_id, vendor_sensor_id, unit, short_unit, description, location, function(err, data) {
     if(err) {
-      console.log("there has been an error");
+      console.log("there has been an error",err);
       res.send(err);
     }
     else {

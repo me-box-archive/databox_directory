@@ -10,7 +10,8 @@
 
 	"tags": [
 		"databox",
-		"core"
+		"core",
+		"directory"
 	],
 
 	"homepage": "https://github.com/me-box/databox_directory",
