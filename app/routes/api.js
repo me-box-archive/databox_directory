@@ -291,7 +291,7 @@ router.post('/sensor/register', function(req, res, next) {
   var vendor_id = req.body.vendor_id;
 
 
-  console.log(req.body);
+  console.log("\n\n---------------------------\n\n" , vendor_id, req.body, "\n-----------------------\n\n");
   sensor.register(driver_id, sensor_type_id, datastore_id, vendor_id, vendor_sensor_id, unit, short_unit, description, location, function(err, data) {
     if(err) {
       console.log("there has been an error",err);

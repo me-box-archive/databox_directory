@@ -2,6 +2,7 @@ var db = require('../database/db.js')
 
 exports.register = function(driver_id, sensor_type_id, datastore_id, vendor_id, vendor_sensor_id, unit, short_unit, description, location, done) {
   
+  console.log("REGISTER CALLED!!!!")
   var success = true; 
   var errors = {};
 
@@ -16,8 +17,9 @@ exports.register = function(driver_id, sensor_type_id, datastore_id, vendor_id, 
                       "short_unit" : short_unit, 
                       "location" : location
                     };
-  console.log(insert_data);
-
+  console.log("insert_data", insert_data);
+  
+  console.log("SELECT * FROM vendor");
   db.get().query("SELECT * FROM vendor where id = ?", vendor_id, function (err, rows) {
     if (err) 
       return done(err);
