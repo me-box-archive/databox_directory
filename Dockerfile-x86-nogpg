@@ -1,0 +1,136 @@
+FROM debian:jessie
+
+
+################################################
+#
+#
+#	MYSQL
+#
+#
+################################################
+# add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
+RUN groupadd -r mysql && useradd -r -g mysql mysql
+
+# add gosu for easy step-down from root
+ENV GOSU_VERSION 1.7
+RUN set -x \
+	&& apt-get update && apt-get install -y --no-install-recommends ca-certificates wget curl && rm -rf /var/lib/apt/lists/* \
+	&& wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$(dpkg --print-architecture)" \
+	#&& wget -O /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$(dpkg --print-architecture).asc" \
+	#&& export GNUPGHOME="$(mktemp -d)" \
+	#&& gpg --keyserver ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 \
+	#&& gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu \
+	#&& rm -r "$GNUPGHOME" /usr/local/bin/gosu.asc \
+	&& chmod +x /usr/local/bin/gosu \
+	&& gosu nobody true \
+	&& apt-get purge -y --auto-remove ca-certificates wget
+
+RUN mkdir /docker-entrypoint-initdb.d
+
+# FATAL ERROR: please install the following Perl modules before executing /usr/local/mysql/scripts/mysql_install_db:
+# File::Basename
+# File::Copy
+# Sys::Hostname
+# Data::Dumper
+RUN apt-get update && apt-get install -y perl pwgen --no-install-recommends && rm -rf /var/lib/apt/lists/*
+
+# gpg: key 5072E1F5: public key "MySQL Release Engineering <mysql-build@oss.oracle.com>" imported
+#RUN apt-key adv --keyserver ha.pool.sks-keyservers.net --recv-keys A4A9406876FCBD3C456770C88C718D3B5072E1F5
+
+ENV MYSQL_MAJOR 5.7
+ENV MYSQL_VERSION 5.7.15-1debian8
+
+RUN echo "deb http://repo.mysql.com/apt/debian/ jessie mysql-${MYSQL_MAJOR}" > /etc/apt/sources.list.d/mysql.list
+
+# the "/var/lib/mysql" stuff here is because the mysql-server postinst doesn't have an explicit way to disable the mysql_install_db codepath besides having a database already "configured" (ie, stuff in /var/lib/mysql/mysql)
+# also, we set debconf keys to make APT a little quieter
+RUN { \
+		echo mysql-community-server mysql-community-server/data-dir select ''; \
+		echo mysql-community-server mysql-community-server/root-pass password ''; \
+		echo mysql-community-server mysql-community-server/re-root-pass password ''; \
+		echo mysql-community-server mysql-community-server/remove-test-db select false; \
+	} | debconf-set-selections \
+	&& apt-get update && apt-get install -y --force-yes mysql-server="${MYSQL_VERSION}" && rm -rf /var/lib/apt/lists/* \
+	&& rm -rf /var/lib/mysql && mkdir -p /var/lib/mysql /var/run/mysqld \
+	&& chown -R mysql:mysql /var/lib/mysql /var/run/mysqld \
+# ensure that /var/run/mysqld (used for socket and lock files) is writable regardless of the UID our mysqld instance ends up having at runtime
+	&& chmod 777 /var/run/mysqld
+
+# comment out a few problematic configuration values
+# don't reverse lookup hostnames, they are usually another container
+RUN sed -Ei 's/^(bind-address|log)/#&/' /etc/mysql/mysql.conf.d/mysqld.cnf \
+	&& echo 'skip-host-cache\nskip-name-resolve' | awk '{ print } $1 == "[mysqld]" && c == 0 { c = 1; system("cat") }' /etc/mysql/mysql.conf.d/mysqld.cnf > /tmp/mysqld.cnf \
+	&& mv /tmp/mysqld.cnf /etc/mysql/mysql.conf.d/mysqld.cnf
+
+VOLUME /var/lib/mysql
+
+
+#EXPOSE 3306
+#CMD ["mysqld"]
+
+################################################
+#
+#
+#	NODE
+#
+#
+################################################
+
+# gpg keys listed at https://github.com/nodejs/node
+#RUN set -ex \
+#  && for key in \
+#    9554F04D7259F04124DE6B476D5A82AC7E37093B \
+#    94AE36675C464D64BAFA68DD7434390BDBE9B9C5 \
+#    0034A06D9D9B0064CE8ADF6BF1747F4AD2306D93 \
+#    FD3A5288F042B6850C66B31F09FE44734EB7990E \
+#    71DCFD284A79C3B38668286BC97EC7A07EDE3FC1 \
+#    DD8F2338BAE7501E3DD5AC78C273792F7D83545D \
+#    B9AE9905FFD7803F25714661B63B535A4C206CA9 \
+#    C4F0DFFF4E8C1A8236409D08E73BC641CC11F4C8 \
+#  ; do \
+#    gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
+#  done
+
+ENV NPM_CONFIG_LOGLEVEL info
+ENV NODE_VERSION 6.7.0
+
+RUN apt-get update \
+  && apt-get install  xz-utils \
+  && curl --insecure -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.xz" \
+  && curl  --insecure -SLO "https://nodejs.org/dist/v$NODE_VERSION/SHASUMS256.txt.asc" \
+  #&& gpg --batch --decrypt --output SHASUMS256.txt SHASUMS256.txt.asc \
+  #&& grep " node-v$NODE_VERSION-linux-x64.tar.xz\$" SHASUMS256.txt | sha256sum -c - \
+  && tar -xJf "node-v$NODE_VERSION-linux-x64.tar.xz" -C /usr/local --strip-components=1 \
+  #&& rm "node-v$NODE_VERSION-linux-x64.tar.xz" SHASUMS256.txt.asc SHASUMS256.txt \
+  #&& rm "node-v$NODE_VERSION-linux-x64.tar.xz" \
+  && ln -s /usr/local/bin/node /usr/local/bin/nodejs
+
+
+#DATABOX config
+LABEL databox.type="directory"
+
+
+#mysql config
+ENV MYSQL_ROOT_PASSWORD databox
+ENV MYSQL_DATABASE databox_directory
+ENV MYSQL_USER databox
+ENV MYSQL_PASSWORD databox
+
+ADD database/create.sql /docker-entrypoint-initdb.d/
+ADD database/seed_content.sql /docker-entrypoint-initdb.d/
+
+COPY docker-entrypoint.sh .
+
+RUN chmod +x ./docker-entrypoint.sh
+ENTRYPOINT ["./docker-entrypoint.sh"]
+
+#node app config
+COPY app/ .
+
+EXPOSE 3000
+
+RUN npm install
+
+
+CMD ["npm","start"]
+#CMD ["ls"]
