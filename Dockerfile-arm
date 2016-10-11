@@ -124,11 +124,13 @@ RUN chmod +x ./docker-entrypoint.sh
 ENTRYPOINT ["./docker-entrypoint.sh"]
 
 #node app config
-COPY app/ .
+COPY app/ app/
 
 EXPOSE 3000
+COPY package.json .
 
 RUN npm install
+RUN npm run clean
 
 
 CMD ["npm","start"]

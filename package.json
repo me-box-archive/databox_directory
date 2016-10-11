@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./app/app.js",
-    "build": "docker build -f Dockerfile-x86 -t databox/databox-directory .",
+    "build": "docker build -f Dockerfile-x86-nogpg -t databox/databox-directory .",
     "deploy": "docker tag databox/databox-directory registry.upintheclouds.org/databox-directory && docker push registry.upintheclouds.org/databox-directory",
     "clean": "node ./node_modules/modclean/bin/modclean.js -p ./node_modules/ -r",
     "getshell": "docker exec -i -t databox-directory /bin/bash",
@@ -21,6 +21,7 @@
     "jade": "~1.11.0",
     "morgan": "~1.6.1",
     "mysql": "^2.11.1",
-    "serve-favicon": "~2.3.0"
+    "serve-favicon": "~2.3.0",
+    "modclean": ""
   }
 }
