@@ -71,6 +71,7 @@ function onListening() {
 }
 
 function onError(error) {
+  console.log(error)
   if (error.syscall !== 'listen') {
     throw error;
   }
@@ -109,5 +110,7 @@ db.connect(db.MODE_PRODUCTION, function(err) {
     
   }
 })
+
+console.log("READY")
 
 module.exports = app;

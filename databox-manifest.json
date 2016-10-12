@@ -1,0 +1,36 @@
+{
+	"manifest-version": 1,
+
+	"name": "databox-directory",
+	"version": "0.1.0",
+
+	"description": "The databox core directory service. ",
+	"author": "UoN",
+	"license": "MIT",
+
+	"tags": [
+		"databox",
+		"core",
+		"directory"
+	],
+
+	"homepage": "https://github.com/me-box/databox_directory",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/me-box/databox_directory.git"
+	},
+
+	"driver-permissions": [
+		{
+			"name": "databox-driver-mobile",
+			"required": true,
+			"benefits": "[markdown-formatted description]",
+			"risks": "[markdown-formatted description]"
+		}
+	],
+
+	"optional-requirements": [
+	],
+	"resource-requirements": {
+	}
+}

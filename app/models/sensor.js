@@ -2,6 +2,7 @@ var db = require('../database/db.js')
 
 exports.register = function(driver_id, sensor_type_id, datastore_id, vendor_id, vendor_sensor_id, unit, short_unit, description, location, done) {
   
+  console.log("REGISTER CALLED!!!!")
   var success = true; 
   var errors = {};
 
@@ -16,23 +17,27 @@ exports.register = function(driver_id, sensor_type_id, datastore_id, vendor_id, 
                       "short_unit" : short_unit, 
                       "location" : location
                     };
-  console.log(insert_data);
-
+  console.log("insert_data", insert_data);
+  
+  console.log("SELECT * FROM vendor");
   db.get().query("SELECT * FROM vendor where id = ?", vendor_id, function (err, rows) {
     if (err) 
       return done(err);
     if(rows.length == 0) {
         success = false;
         errors.vendor_error = "vendor id does not exist";
+        console.log(errors);
     }    
-
+    console.log("SELECT * FROM sensor_type");
     db.get().query("SELECT * FROM sensor_type where id = ?", sensor_type_id, function (err, rows) {
       if (err) 
         return done(err);
       if(rows.length == 0) {
           success = false;
           errors.sensor_type_error = "sensor type id does not exist";
+          console.log(errors);
       }
+      console.log("SELECT * FROM datastore");
       db.get().query("SELECT * FROM datastore where id = ?", datastore_id, function (err, rows) {
         
         if (err) 
@@ -42,13 +47,16 @@ exports.register = function(driver_id, sensor_type_id, datastore_id, vendor_id, 
             success = false;
             console.log(success);
             errors.datastore_error = "datastore id does not exist";
+            console.log(errors);
         }  
+        console.log("SELECT * FROM driver");
         db.get().query("SELECT * FROM driver where id = ?", driver_id, function (err, rows) {
           if (err) 
             return done(err);
           if(rows.length == 0) {
               success = false;
               errors.driver_error = "driver id does not exist";
+              console.log(errors);
           }
           if(success) {
             console.log("progress");
