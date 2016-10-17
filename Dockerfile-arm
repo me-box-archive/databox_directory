@@ -118,10 +118,10 @@ ENV MYSQL_PASSWORD databox
 ADD database/create.sql /docker-entrypoint-initdb.d/
 ADD database/seed_content.sql /docker-entrypoint-initdb.d/
 
-COPY docker-entrypoint.sh .
+COPY docker-entrypoint-arm.sh .
 
-RUN chmod +x ./docker-entrypoint.sh
-ENTRYPOINT ["./docker-entrypoint.sh"]
+RUN chmod +x ./docker-entrypoint-arm.sh
+ENTRYPOINT ["./docker-entrypoint-arm.sh"]
 
 #node app config
 COPY app/ app/
