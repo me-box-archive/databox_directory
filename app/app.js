@@ -22,6 +22,7 @@ app.set('view engine', 'jade');
 
 // app setup
 app.use(logger('dev'));
+app.use(express.static(__dirname + '/static'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
