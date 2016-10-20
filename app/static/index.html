@@ -16,7 +16,7 @@
         endpoints.forEach((ep,index) => {
             console.log(ep);
             $.get(ep, {}, function(data) {
-                $('#data').append('<h3>'+ep+'</h3><pre><code data-language="json">'+JSON.stringify(data)+'</code></pre>');
+                $('#data').append('<h3>'+ep+'</h3><pre><code data-language="json">'+JSON.stringify(data,null,'  ')+'</code></pre>');
                 if (index === endpoints.length - 1) {
                     $.getScript("./rainbow-custom.min.js");
                 }
