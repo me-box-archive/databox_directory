@@ -27,11 +27,11 @@ DROP TABLE IF EXISTS `actuator`;
 
 CREATE TABLE `actuator` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `controller_id` int(11) unsigned DEFAULT NULL,
-  `driver_id` int(11) unsigned DEFAULT NULL,
+  `controller_id` int(30) unsigned DEFAULT NULL,
+  `driver_id` int(30) unsigned DEFAULT NULL,
   `actuator_type_id` int(10) unsigned DEFAULT NULL,
-  `vendor_id` int(11) unsigned DEFAULT NULL,
-  `vendor_actuator_id` char(11) DEFAULT NULL,
+  `vendor_id` int(30) unsigned DEFAULT NULL,
+  `vendor_actuator_id` char(30) DEFAULT NULL,
   `description` text,
   `location` text,
   PRIMARY KEY (`id`),
@@ -55,7 +55,7 @@ DROP TABLE IF EXISTS `actuator_method`;
 CREATE TABLE `actuator_method` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `actuator_id` int(11) unsigned NOT NULL,
-  `description` char(20) NOT NULL DEFAULT '',
+  `description` char(30) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `actuator_id` (`actuator_id`),
   CONSTRAINT `actuator_method_ibfk_1` FOREIGN KEY (`actuator_id`) REFERENCES `actuator` (`id`)
@@ -97,7 +97,7 @@ DROP TABLE IF EXISTS `datastore`;
 
 CREATE TABLE `datastore` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `hostname` char(30) NOT NULL DEFAULT '',
+  `hostname` char(60) NOT NULL DEFAULT '',
   `api_url` text NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `hostname` (`hostname`)
@@ -114,7 +114,7 @@ CREATE TABLE `driver` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `description` text NOT NULL,
   `hostname` char(30) NOT NULL DEFAULT '',
-  `vendor_id` int(11) unsigned NOT NULL,
+  `vendor_id` int(30) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `vendor_id` (`vendor_id`),
   CONSTRAINT `driver_ibfk_1` FOREIGN KEY (`vendor_id`) REFERENCES `vendor` (`id`)
@@ -129,13 +129,13 @@ DROP TABLE IF EXISTS `sensor`;
 
 CREATE TABLE `sensor` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `driver_id` int(11) unsigned DEFAULT NULL,
-  `sensor_type_id` int(11) unsigned DEFAULT NULL,
-  `datastore_id` int(11) unsigned DEFAULT NULL,
-  `vendor_id` int(11) unsigned DEFAULT NULL,
-  `vendor_sensor_id` char(11) DEFAULT NULL,
-  `unit` char(20) DEFAULT NULL,
-  `short_unit` char(5) DEFAULT '',
+  `driver_id` int(30) unsigned DEFAULT NULL,
+  `sensor_type_id` int(30) unsigned DEFAULT NULL,
+  `datastore_id` int(30) unsigned DEFAULT NULL,
+  `vendor_id` int(30) unsigned DEFAULT NULL,
+  `vendor_sensor_id` char(30) DEFAULT NULL,
+  `unit` char(30) DEFAULT NULL,
+  `short_unit` char(30) DEFAULT '',
   `description` text,
   `location` text,
   PRIMARY KEY (`id`),
