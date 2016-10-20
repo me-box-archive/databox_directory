@@ -23,7 +23,7 @@ exports.register = function(actuator_id, description, done) {
     }
 
 	if(success) {
-      db.get().query("SELECT * FROM driver WHERE actuator_id = ? AND desription = ?", [actuator_id, description], function (err, rows) {
+      db.get().query("SELECT * FROM driver WHERE actuator_id = ? AND description = ?", [actuator_id, description], function (err, rows) {
         if (err) 
           return done(err);
         if(rows.length > 0)
