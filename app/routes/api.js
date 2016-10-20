@@ -312,7 +312,7 @@ router.post('/actuator/register', function(req, res, next) {
   var location = req.body.location;
   var vendor_id = req.body.vendor_id;
 
-  sensor.register(driver_id, actuator_type_id, controller_id, vendor_id, vendor_actuator_id, description, location, function(err, data) {
+  actuator.register(driver_id, actuator_type_id, controller_id, vendor_id, vendor_actuator_id, description, location, function(err, data) {
     if(err) {
       console.log("there has been an error");
       res.send(err);
