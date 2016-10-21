@@ -60,7 +60,7 @@ exports.register = function(driver_id, sensor_type_id, datastore_id, vendor_id, 
           }
           if(success) {
             console.log("progress");
-            db.get().query("SELECT * FROM sensor where vendor_sensor_id = ? AND vendor_id = ?", [vendor_sensor_id, vendor_id], function (err, rows) {
+            db.get().query("SELECT * FROM sensor where vendor_sensor_id = ? AND vendor_id = ? AND sensor_type_id = ? ", [vendor_sensor_id, vendor_id, sensor_type_id], function (err, rows) {
               if (err) 
                 return done(err);
               if(rows.length > 0)
@@ -108,12 +108,12 @@ exports.register = function(driver_id, sensor_type_id, datastore_id, vendor_id, 
   });
 };
 
-exports.get_global_id = function(vendor_sensor_id, vendor_id, done) {
+exports.get_global_id = function(vendor_sensor_id, vendor_id, sensor_type_id, done) {
   
   var success = true; 
   var errors = {};
 
-  db.get().query("SELECT * FROM sensor where vendor_sensor_id = ? AND vendor_id = ?", vendor_sensor_id, vendor_id, function (err, rows) {
+  db.get().query("SELECT * FROM sensor where vendor_sensor_id = ? AND vendor_id = ? AND sensor_type_id", vendor_sensor_id, vendor_id, sensor_type_id, function (err, rows) {
     if (err) 
       return done(err);
     if(rows.length > 0)
