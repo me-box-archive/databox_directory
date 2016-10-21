@@ -20,7 +20,7 @@ exports.register = function(driver_id, actuator_type_id, controller_id, vendor_i
           success = false;
           errors.sensor_type_error = "actuator type id does not exist";
       }
-      db.get().query("SELECT * FROM controller where id = ?", controller_id, function (err, rows) {
+      /*db.get().query("SELECT * FROM controller where id = ?", controller_id, function (err, rows) {
         
         if (err) 
           return done(err);
@@ -29,7 +29,7 @@ exports.register = function(driver_id, actuator_type_id, controller_id, vendor_i
             success = false;
             console.log(success);
             errors.datastore_error = "controller id does not exist";
-        }  
+        }*/  
         db.get().query("SELECT * FROM driver where id = ?", driver_id, function (err, rows) {
           if (err) 
             return done(err);
@@ -78,7 +78,7 @@ exports.register = function(driver_id, actuator_type_id, controller_id, vendor_i
           }
         });
       });
-    });
+    //});
   });
 };
 
