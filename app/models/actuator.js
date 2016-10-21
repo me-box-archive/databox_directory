@@ -38,7 +38,7 @@ exports.register = function(driver_id, actuator_type_id, controller_id, vendor_i
               errors.driver_error = "driver id does not exist";
           }
           if(success) {
-            db.get().query("SELECT * FROM actuator where vendor_acuator_id = ? AND vendor_id = ?", [vendor_acuator_id, vendor_id], function (err, rows) {
+            db.get().query("SELECT * FROM actuator where vendor_actuator_id = ? AND vendor_id = ? AND actuator_type_id = ?", [vendor_actuator_id, vendor_id, actuator_type_id], function (err, rows) {
               if (err) 
                 return done(err);
               if(rows.length > 0)
