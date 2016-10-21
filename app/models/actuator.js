@@ -82,6 +82,27 @@ exports.register = function(driver_id, actuator_type_id, controller_id, vendor_i
   });
 };
 
+exports.get_driver_hostname = function (actuator_id,done) {
+  console.log("get_driver_hostname for " + actuator_id)
+  db.get().query("SELECT * FROM actuator WHERE id = ?", [actuator_id], function (err, rows) {
+    if (err) {
+      return done(err);
+    } else if (rows.length < 1) {
+          return done({Error:"no actuator found for id=" + actuator_id});
+    } else {
+      var driver_id = rows[0].driver_id;
+      db.get().query("SELECT * FROM driver WHERE id = ?", [driver_id], function (err, rows) {
+        if (err) {
+          return done(err);
+        } else if (rows.length < 1) {
+          return done({Error:"no driver found"});
+        } else {
+          return done(null, {hostname:rows[0].hostname});
+        }
+      })
+    }
+  })
+}
 
 exports.get_all = function(done) {
   db.get().query("SELECT * FROM actuator", function (err, rows) {

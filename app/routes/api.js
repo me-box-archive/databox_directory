@@ -46,6 +46,19 @@ router.get('/actuator', function(req, res, next) {
   });
 });
 
+router.get('/actuator/:id/driver_hostname', function(req, res, next) {
+  var actuator_id = req.params.id;
+  actuator.get_driver_hostname(actuator_id, function(err, data) {
+  	if(err) {
+  		console.log("there has been an error",err);
+  		res.send(err);
+  	}
+  	else {
+  		res.send(data);
+  	}
+  });
+});
+
 router.get('/controller', function(req, res, next) {
   
   controller.get_all(function(err, data) {
