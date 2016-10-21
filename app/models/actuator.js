@@ -115,7 +115,7 @@ exports.get_all = function(done) {
 }
 
 exports.get_by_vendor_id = function(vendor_id, done) {
-  db.get().query('SELECT * FROM actuator WHERE vendor_id = ?', vendor_id, function (err, rows) {
+  db.get().query('SELECT actuator.id, driver_id, actuator_type_id ,vendor_id, vendor_actuator_id, actuator.description, location, actuator_type.description as actuator_type FROM actuator LEFT JOIN actuator_type ON actuator.actuator_type_id = actuator_type.id where vendor_id = ?', vendor_id, function (err, rows) {
     if (err) return done(err)
     done(null, rows)
   })
