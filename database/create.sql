@@ -39,7 +39,8 @@ CREATE TABLE `actuator` (
   KEY `controller_id` (`controller_id`),
   KEY `driver_id` (`driver_id`),
   KEY `actuator_type_id` (`actuator_type_id`),
-  CONSTRAINT `actuator_ibfk_1` FOREIGN KEY (`controller_id`) REFERENCES `controller` (`id`),
+  #CONSTRAINT `actuator_ibfk_1` FOREIGN KEY (`controller_id`) REFERENCES `controller` (`id`),
+  CONSTRAINT `actuator_ibfk_1` FOREIGN KEY (`controller_id`) REFERENCES `datastore` (`id`),
   CONSTRAINT `actuator_ibfk_2` FOREIGN KEY (`driver_id`) REFERENCES `driver` (`id`),
   CONSTRAINT `actuator_ibfk_3` FOREIGN KEY (`vendor_id`) REFERENCES `vendor` (`id`),
   CONSTRAINT `actuator_ibfk_4` FOREIGN KEY (`actuator_type_id`) REFERENCES `actuator_type` (`id`)
