@@ -319,7 +319,7 @@ router.post('/sensor/register', function(req, res, next) {
 router.post('/actuator/register', function(req, res, next) {
   var driver_id = req.body.driver_id;
   var actuator_type_id = req.body.actuator_type_id;
-  var controller_id = req.body.controllerdatastore_id;
+  var controller_id = req.body.controller_id;
   var vendor_actuator_id = req.body.vendor_actuator_id;
   var description = req.body.description;
   var location = req.body.location;
