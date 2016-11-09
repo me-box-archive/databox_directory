@@ -98,7 +98,7 @@ DROP TABLE IF EXISTS `datastore`;
 
 CREATE TABLE `datastore` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `hostname` char(60) NOT NULL DEFAULT '',
+  `hostname` char(90) NOT NULL DEFAULT '',
   `api_url` text NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `hostname` (`hostname`)
@@ -114,7 +114,7 @@ DROP TABLE IF EXISTS `driver`;
 CREATE TABLE `driver` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `description` text NOT NULL,
-  `hostname` char(30) NOT NULL DEFAULT '',
+  `hostname` char(90) NOT NULL DEFAULT '',
   `vendor_id` int(30) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `vendor_id` (`vendor_id`),
