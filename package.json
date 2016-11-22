@@ -2,12 +2,15 @@
   "name": "databox-directory",
   "version": "0.0.0",
   "private": true,
+  "config": {
+    "registry": "registry.iotdatabox.com"
+  },
   "scripts": {
     "start": "node ./app/app.js",
     "build": "docker build -f Dockerfile-x86-nogpg -t databox/databox-directory .",
-    "deploy": "docker tag databox/databox-directory registry.iotdatabox.com/databox-directory && docker push registry.iotdatabox.com/databox-directory",
+    "deploy": "docker tag databox/databox-directory $npm_package_config_registry/databox-directory && docker push $npm_package_config_registry/databox-directory",
     "build-arm": "docker build -f Dockerfile-arm -t databox/databox-directory-arm .",
-    "deploy-arm": "docker tag databox/databox-directory-arm registry.iotdatabox.com/databox-directory-arm && docker push registry.iotdatabox.com/databox-directory-arm",
+    "deploy-arm": "docker tag databox/databox-directory-arm $npm_package_config_registry/databox-directory-arm && docker push $npm_package_config_registry/databox-directory-arm",
     "clean": "node ./node_modules/modclean/bin/modclean.js -p ./node_modules/ -r",
     "getshell": "docker exec -i -t databox-directory /bin/bash",
     "kill": "docker kill databox-directory",
